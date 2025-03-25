@@ -45,28 +45,23 @@ raw_data = read_excel('file path/filename.xls')
  
 #### Step 3.3 : Read multiple files and bind it into a single file
 ##### option 1: read .xls files
-```r
-data <- list.files(pattern = ".xls", full.names = TRUE)
-myfiles = lapply(data, read_xls)
-raw_data <- dplyr::bind_rows(myfiles) %>% clean_names()
-```
-
 ##### Breaking down the code:
 ```r
+The code snippet above list all the .xls files in the working directory
+
 data <- list.files(pattern = ".xls", full.names = TRUE)
 ```
-The code snippet above list all the .xls files in the working directory
 ```r
-myfiles = lapply(data, read_xls)
-```
 The code snippet above read all the .xls files in the working directory
 
-```r
-raw_data <- dplyr::bind_rows(myfiles) %>% clean_names()
+myfiles = lapply(data, read_xls)
 ```
-
+```r
 The code snippet above combine all .xls files into a single dataframe called "raw_data"
 
+raw_data <- dplyr::bind_rows(myfiles) %>% clean_names()
+```
+- *Note*:
 
 ### Step 4: View the data (description of data)
 ```r
