@@ -250,12 +250,16 @@ write.csv(raw_data, 'cleaning_data.csv')
 monthly_data_DS = raw_data %>%
   group_by(adm1, adm2, year, month) %>%
   dplyr::summarise(across(allout_u5:llins_stockout_days, ~ sum(.x, na.rm = TRUE)))
+
+write.csv(monthly_data_DS, 'Monthly_HD_data.csv')
 ```
 #### Step 9.2: Aggreate data element yearly at the appropriate admnin level and save it
 ```r
-monthly_data_DS = raw_data %>%
+yearly_data_DS = raw_data %>%
   group_by(adm1, adm2, year) %>%
   dplyr::summarise(across(allout_u5:llins_stockout_days, ~ sum(.x, na.rm = TRUE)))
+
+write.csv(yearly_data_DS, 'Yearly_HD_data.csv')
 ```
 
 
