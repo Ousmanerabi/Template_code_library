@@ -1,1 +1,81 @@
-# Template_code_library
+### Step 1: Install packages
+```r
+
+
+
+```
+### Step 2: Load the packages already install
+```r
+
+
+
+```
+### Step 3: Import the data
+```r
+
+
+
+```
+### step 3.1 : Setup the directory 
+### Step 3.2 : Read a single file:
+```r
+
+
+
+```
+### Step 3.3 : Read multiple files and bind it into a single file
+```r
+
+
+
+```
+### Step 4: View the data (description of data)
+```r
+
+
+
+```
+### Step 5: Select and rename key variables
+```r
+
+
+
+```
+### Step 6: Compute new variables
+```r
+
+
+
+```
+### Step 7: Transform data element into appropriate data type
+```r
+
+
+
+```
+### Step 8: Save the transform data in excel/csv
+```r
+
+
+
+```
+### Step 8: Aggregate data element monthly and yearly at the appropriate admnin level
+```r
+
+
+
+```
+### Step 8.1: Aggreate data element monthly at the appropriate admnin level and save it
+```r
+
+
+
+```
+### Step 8.2: Aggreate data element yearly at the appropriate admnin level and save it
+```r
+
+
+
+```
+
+
