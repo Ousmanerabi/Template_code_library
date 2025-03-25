@@ -11,11 +11,7 @@
 
 ```
 ### Step 3: Import data
-```r
 
-
-
-```
 #### Step 3.1 : Setup the directory
 ```r
 
