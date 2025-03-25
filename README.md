@@ -1,13 +1,20 @@
 ### Step 1: Install packages
 ```r
-
-
-
+install.packages(c('dplyr', 'readxl', 'tidyverse', 'janitor', 'writexl'))
 ```
+`dplyr`: vvvv
+`readxl`:
+`janitor`:
+`tidyverse`:
+`writexl`:
+
 ### Step 2: Load the packages already install
 ```r
-
-
+library(dplyr)
+library(readxl)
+library(tidyverse)
+library(janitor)
+library(writexl)
 
 ```
 ### Step 3: Import data
