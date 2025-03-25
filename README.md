@@ -239,22 +239,23 @@ raw_data = raw_data %>%
 ### Step 8: Save the transform data in excel/csv
 ```r
 
-
+write.csv(raw_data, 'cleaning_data.csv')
 
 ```
 ### Step 9: Aggregate data element monthly and yearly at the appropriate admnin level
 
+
 #### Step 9.1: Aggreate data element monthly at the appropriate admnin level and save it
 ```r
-
-
-
+monthly_data_DS = raw_data %>%
+  group_by(adm1, adm2, year, month) %>%
+  dplyr::summarise(across(allout_u5:llins_stockout_days, ~ sum(.x, na.rm = TRUE)))
 ```
 #### Step 9.2: Aggreate data element yearly at the appropriate admnin level and save it
 ```r
-
-
-
+monthly_data_DS = raw_data %>%
+  group_by(adm1, adm2, year) %>%
+  dplyr::summarise(across(allout_u5:llins_stockout_days, ~ sum(.x, na.rm = TRUE)))
 ```
 
 
