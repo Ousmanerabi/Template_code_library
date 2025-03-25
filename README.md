@@ -2,7 +2,8 @@
 ```r
 install.packages(c('dplyr', 'readxl', 'tidyverse', 'janitor', 'writexl'))
 ```
-`dplyr`: vvvv \n
+`dplyr`: vvvv
+
 `readxl`: vv
 `janitor`: vv
 `tidyverse`: vv
