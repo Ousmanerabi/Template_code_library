@@ -3,10 +3,10 @@
 install.packages(c('dplyr', 'readxl', 'tidyverse', 'janitor', 'writexl'))
 ```
 `dplyr`: vvvv
-`readxl`:
-`janitor`:
-`tidyverse`:
-`writexl`:
+`readxl`: vv
+`janitor`: vv
+`tidyverse`: vv
+`writexl`:vvv
 
 ### Step 2: Load the packages already install
 ```r
