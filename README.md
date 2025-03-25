@@ -55,7 +55,7 @@ raw_data <- dplyr::bind_rows(myfiles) %>% clean_names()
 ```r
 data <- list.files(pattern = ".xls", full.names = TRUE)
 ```
-
+The code snippet above list all the .xls files in the working directory
 ```r
 myfiles = lapply(data, read_xls)
 ```
