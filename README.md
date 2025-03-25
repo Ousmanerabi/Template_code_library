@@ -2,7 +2,7 @@
 ```r
 install.packages(c('dplyr', 'readxl', 'tidyverse', 'janitor', 'writexl'))
 ```
-`dplyr`: is a grammar of data manipulation, providing a consistent set of verbs that help you solve the most common data manipulation challenges.
+`dplyr`: is a grammar of data manipulation, providing a consistent set of verbs that help you solve the most common data manipulation challenges (ref:https://dplyr.tidyverse.org/).
 
 `readxl`: 
 
