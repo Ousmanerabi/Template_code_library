@@ -10,20 +10,24 @@
 
 
 ```
-### Step 3: Import the data
+### Step 3: Import data
 ```r
 
 
 
 ```
-### step 3.1 : Setup the directory 
-### Step 3.2 : Read a single file:
+#### Step 3.1 : Setup the directory
+```r
+
+
+```
+#### Step 3.2 : Read a single file:
 ```r
 
 
 
 ```
-### Step 3.3 : Read multiple files and bind it into a single file
+#### Step 3.3 : Read multiple files and bind it into a single file
 ```r
 
 
@@ -59,19 +63,15 @@
 
 
 ```
-### Step 8: Aggregate data element monthly and yearly at the appropriate admnin level
+### Step 9: Aggregate data element monthly and yearly at the appropriate admnin level
+
+#### Step 9.1: Aggreate data element monthly at the appropriate admnin level and save it
 ```r
 
 
 
 ```
-### Step 8.1: Aggreate data element monthly at the appropriate admnin level and save it
-```r
-
-
-
-```
-### Step 8.2: Aggreate data element yearly at the appropriate admnin level and save it
+#### Step 9.2: Aggreate data element yearly at the appropriate admnin level and save it
 ```r
 
 
