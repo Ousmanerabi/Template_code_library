@@ -4,13 +4,18 @@ install.packages(c('dplyr', 'readxl', 'tidyverse', 'janitor', 'writexl'))
 ```
 `dplyr`: is a grammar of data manipulation, providing a consistent set of verbs that help you solve the most common data manipulation challenges (ref:https://dplyr.tidyverse.org/).
 
-`readxl`: 
+`readxl`: The readxl package makes it easy to get data out of Excel and into R. Compared to many of the existing packages (e.g. gdata, xlsx, xlsReadWrite) readxl has no external dependencies, 
+          so it’s easy to install and use on all operating systems.
 
-`janitor`: 
+`janitor`: has simple functions for examining and cleaning dirty data. The main janitor functions:
 
-`tidyverse`: 
+perfectly format data.frame column names;
+create and format frequency tables of one, two, or three variables - think an improved table(); and
+provide other tools for cleaning and examining data.frames.
 
-`writexl`:
+`tidyverse`:  is designed to make it easy to install and load core packages from the tidyverse in a single command
+
+`writexl`: 
 
 ### Step 2: Load the packages already installed
 ```r
