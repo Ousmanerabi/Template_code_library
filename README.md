@@ -222,10 +222,13 @@ An outlier is “an observation that deviates so much from other observations as
 This code detects outliers at the health facility level by month and year using three different methods:
 
 * Mean ± 3 standard deviations:
-* 
+
 The method of the mean plus or minus three SD is based on the characteristics of a `normal distribution` for which 99.87% of the data appear within this range.
 
 Replace 'column' with the variable for which you want to detect outliers.
+
+The `group_by` function is used to group the values for each health facility by year and identify outliers based on the annual data for that facility. 
+This approach ensures that values from large facilities don't dominate the analysis, as many outliers from smaller facilities might otherwise go undetected.
 
 The `summarise` function calculates the mean and standard deviation for the specified variable.
 
@@ -257,6 +260,8 @@ Interquartile Range (IQR) is a technique that detects outliers by measuring the 
 The Interquartile Range (IQR) measures variability by splitting a data set into quartiles. The data is first arranged in ascending order, then divided into four equal parts. 
 
 The values Q1 (25th percentile), Q2 (50th percentile or median), and Q3 (75th percentile) are used to separate the data into these four segments.
+
+
 ```r
 df_stats_iqr <- df %>%
     group_by(adm1, adm2, hf, UID, year) %>%  # Removed Variables if it's not needed for grouping
@@ -271,8 +276,19 @@ df_stats_iqr <- df %>%
     )
 ```
 
-* Median ± 15 median absolute deviation (MAD)
+* Median ± 15 median absolute deviation (MAD):
 
+```r
+  df_stats_mad <- df %>%
+    group_by(adm1, adm2, hf, UID, year) %>%  # Removed Variables if it's not needed for grouping
+    summarise(
+      mediane = ceiling(median(.data[[column]], na.rm = TRUE)),
+      median_absolute = ceiling(mad(.data[[column]], constant = 1, na.rm = TRUE)),
+      BI_median = mediane - 15 * median_absolute,
+      BS_median = mediane + 15 * median_absolute,
+      .groups = "drop"
+    )
+```
 ### Step 7: Replace outliers
 
 ### Step 8: Compute new variables
