@@ -213,8 +213,20 @@ raw_data = raw_data %>% %>% clean_names()%>%
 
 ```
 
-```
-### Step 6: Compute new variables
+### Step 6: Outliers detection
+
+This code detects outliers at the health facility level by month and year using three different methods:
+
+* Mean ± 3 standard deviations
+
+* Interquartile range (IQR)
+
+* Median ± 15 median absolute deviation (MAD)
+
+### Step 7: Replace outliers
+
+### Step 8: Compute new variables
+
 ```r
 raw_data = raw_data %>%
   rowwise() %>% 
