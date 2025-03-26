@@ -46,7 +46,8 @@ raw_data = read.csv('file path/filename.csv')
 ```
 * Semicolon-delimited (.csv) file:
 
-```raw_data = read.csv2('file path/filename.csv')
+```
+raw_data = read.csv2('file path/filename.csv')
 ```
 
 `read_csv()`: is special cases of the more general read_delim(). They're useful for reading the most common types of flat file data, comma separated values and tab separated values, 
