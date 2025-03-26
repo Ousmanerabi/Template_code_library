@@ -33,7 +33,8 @@ library(writexl)
 setwd()
 ```
 ` setwd`: file path
-#### Step 3.2 : Read a single file:
+#### Step 3.2 : Read a single file: To import a single file, you must first identify its extension (.xls, .xlsx, or .csv).
+`For Excel files (.xls and .xlsx), use the `read_excel` function from the `readxl` package.
 ```r
 raw_data = read.csv('file path/filename.csv')
 raw_data = read.csv2('file path/filename.csv')
