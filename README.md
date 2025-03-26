@@ -82,11 +82,17 @@ glimpse()
 
 ```
 ### Step 5: Select and rename key variables
-` This code enables you to select all the variables needed for routine data analysis and rename them accordingly. Make sure to adjust the variable names to match those in your raw_data dataframe.
-  The `clean_names` function replaces spaces in variable names with `underscores (_)`.
+` This code enables you to select all the variables needed for routine data analysis and rename them accordingly.
+  The `clean_names` function replaces spaces in variable names with `underscores (_).
+  The `separat`e function splits the period (date) column into separate `month and `year columns.
+  The first `mutate` function is used to create new variable month. 
+  The final 'mutate` function is used to convert the month and year into numerical variables.
+  
+
+  ##### Make sure to adjust the variable names to match those in your raw_data dataframe.
 ```r
 
-raw_data = raw_data %>% %>% clean_names()
+raw_data = raw_data %>% %>% clean_names()%>%
                 dplyr::select(adm1 = orgunitlevel2, adm2, hf = organisationunitname, period =periodname, 
                 reprate = consultation_externe_reporting_rate,
                 reptime = consultation_externe_reporting_rate_on_time, 
@@ -179,7 +185,24 @@ raw_data = raw_data %>% %>% clean_names()
                 anc1 = smi_nombre_de_femmes_vues_en_cpn1, llins_anc = smi_nombre_femmes_enceintes_ayant_recu_des_milda_lors_de_la_cpn,
                 llins_epi = smi_nombre_enfants_de_0_11_mois_ayant_recu_des_milda, iptp1 = smi_nombre_de_femmes_enceintes_ayant_pris_une_dose_de_tpi,
                 iptp2 = smi_nombre_de_femmes_enceintes_ayant_pris_deux_doses_de_tpi, iptp3 = smi_nombre_de_femmes_enceintes_ayant_pris_trois_doses_de_tpi,
-                )
+                )%>%
+  separate(period, into = c("month", "year"), sep = " ") %>% 
+  mutate(month = case_when(month == "Janvier" ~ 1,
+                           month == "Fevrier" ~ 2,
+                           month == "Mars" ~ 3,
+                           month == "Avril" ~ 4,
+                           month == "Mai" ~ 5,
+                           month == "Juin" ~ 6,
+                           month == "Juillet" ~ 7,
+                           month == "Aout" ~ 8,
+                           month == "Septembre" ~ 9,
+                           month == "Octobre" ~ 10,
+                           month == "Novembre" ~ 11,
+                           month == "Decembre" ~ 12
+  )) %>% 
+  mutate(month = as.numeric(month), year = as.numeric(year)) 
+
+```
 
 ```
 ### Step 6: Compute new variables
@@ -229,23 +252,7 @@ raw_data = raw_data %>%
 ```r
 
 raw_data = raw_data %>%
-  separate(period, into = c("month", "year"), sep = " ") %>% 
-  mutate(month = case_when(month == "Janvier" ~ 1,
-                           month == "Fevrier" ~ 2,
-                           month == "Mars" ~ 3,
-                           month == "Avril" ~ 4,
-                           month == "Mai" ~ 5,
-                           month == "Juin" ~ 6,
-                           month == "Juillet" ~ 7,
-                           month == "Aout" ~ 8,
-                           month == "Septembre" ~ 9,
-                           month == "Octobre" ~ 10,
-                           month == "Novembre" ~ 11,
-                           month == "Decembre" ~ 12
-  )) %>% 
-  mutate(month = as.numeric(month), year = as.numeric(year)) 
 
-```
 ### Step 8: Save the transform data in excel/csv
 ```r
 
