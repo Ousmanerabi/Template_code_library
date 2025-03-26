@@ -91,7 +91,7 @@ glimpse()
   
   The first `mutate` function is used to create new variable month. 
   
-  The final 'mutate` function is used to convert the month and year into numerical variables.
+  The final `mutate` function is used to convert the month and year into numerical variables.
   
 
   ##### Make sure to adjust the variable names to match those in your raw_data dataframe.
