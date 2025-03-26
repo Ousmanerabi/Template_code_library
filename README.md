@@ -40,10 +40,15 @@ setwd()
 ```
 `For .csv files, the import method depends on the delimiter used:
 
-`Comma-delimited (.csv) file:
+“*” Comma-delimited (.csv) file:
 ```r
 raw_data = read.csv('file path/filename.csv')
 ```
+“*” Semicolon-delimited (.csv) file:
+
+```raw_data = read.csv2('file path/filename.csv')
+```
+
 `read_csv()`: is special cases of the more general read_delim(). They're useful for reading the most common types of flat file data, comma separated values and tab separated values, 
  respectively. 
 
