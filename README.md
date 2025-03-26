@@ -261,6 +261,13 @@ The Interquartile Range (IQR) measures variability by splitting a data set into 
 
 The values Q1 (25th percentile), Q2 (50th percentile or median), and Q3 (75th percentile) are used to separate the data into these four segments.
 
+The `group_by` function: see Mean ± 3 standard deviations
+
+The 'arrange' function sorts the data by health facility (hf) and year.
+
+The `summarise` function: see Mean ± 3 standard deviations
+
+The `quantile` function produces sample quantiles corresponding to the given probabilities. 
 
 ```r
 df_stats_iqr <- df %>%
@@ -278,6 +285,10 @@ df_stats_iqr <- df %>%
 
 * Median ± 15 median absolute deviation (MAD):
 
+ MAD is a resistant measure of variability as it relies on the median as the estimate of the center of the distribution, and on the absolute difference rather than the squared difference.
+
+ The advantage of MAD is the avoidance of influence by outliers.
+
 ```r
   df_stats_mad <- df %>%
     group_by(adm1, adm2, hf, UID, year) %>%  # Removed Variables if it's not needed for grouping
@@ -290,6 +301,7 @@ df_stats_iqr <- df %>%
     )
 ```
 ### Step 7: Replace outliers
+
 
 ### Step 8: Compute new variables
 
