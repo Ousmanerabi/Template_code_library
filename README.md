@@ -83,9 +83,13 @@ glimpse()
 ```
 ### Step 5: Select and rename key variables
 ` This code enables you to select all the variables needed for routine data analysis and rename them accordingly.
+
   The `clean_names` function replaces spaces in variable names with `underscores (_).
-  The `separat`e function splits the period (date) column into separate `month and `year columns.
+  
+  The `separate` function splits the period (date) column into separate `month and `year columns.
+  
   The first `mutate` function is used to create new variable month. 
+  
   The final 'mutate` function is used to convert the month and year into numerical variables.
   
 
