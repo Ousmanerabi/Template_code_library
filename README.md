@@ -218,9 +218,40 @@ raw_data = raw_data %>% %>% clean_names()%>%
 This code detects outliers at the health facility level by month and year using three different methods:
 
 * Mean ± 3 standard deviations
+Replace 'column' with the variable for which you want to detect outliers.
+The summarise function calculates the mean and standard deviation for the specified variable.
+The ceiling function is used to round up the calculated value.
 
+sd: the standard deviation of the variable
+
+lower_bound: the lower limit of the interval
+
+upper_bound: the upper limit of the interval
+
+```r
+df_stats <- raw_data %>%
+    group_by(adm1, adm2, hf, UID, year) %>% 
+    summarise(
+      moyenne = ceiling(mean(.data[[column]], na.rm = TRUE)),
+      sd = ceiling(sd(.data[[column]], na.rm = TRUE)),
+      lower_bound = moyenne - 3 * sd,
+      upper_bound = moyenne + 3 * sd,
+      .groups = "drop"
+    )
+
+```
 * Interquartile range (IQR)
-
+```r
+df_stats <- df %>%
+    group_by(adm1, adm2, hf, UID, year) %>%  # Removed Variables if it's not needed for grouping
+    summarise(
+      Q1 = quantile(.data[[column]], 0.25, na.rm = TRUE),
+      Q3 = quantile(.data[[column]], 0.75, na.rm = TRUE),
+      IQR = quantile(.data[[column]], 0.75, na.rm = TRUE) - quantile(.data[[column]], 0.25, na.rm = TRUE),
+      lower_bound_iqr = quantile(.data[[column]], 0.25, na.rm = TRUE) - 1.5 * (quantile(.data[[column]], 0.75, na.rm = TRUE) - quantile(.data[[column]], 0.25, na.rm = TRUE)),
+      upper_bound_iqr = quantile(.data[[column]], 0.75, na.rm = TRUE) + 1.5 * (quantile(.data[[column]], 0.75, na.rm = TRUE) - quantile(.data[[column]], 0.25, na.rm = TRUE)),
+      .groups = "drop"
+    )
 * Median ± 15 median absolute deviation (MAD)
 
 ### Step 7: Replace outliers
