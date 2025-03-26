@@ -82,7 +82,7 @@ glimpse()
 
 ```
 ### Step 5: Select and rename key variables
-` This code enables you to select all the variables needed for routine data analysis and rename them accordingly.
+ `This code enables you to select all the variables needed for routine data analysis and rename them accordingly.
 
   The `clean_names` function replaces spaces in variable names with `underscores (_).
   
