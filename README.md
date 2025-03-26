@@ -35,11 +35,14 @@ setwd()
 ` setwd`: file path
 #### Step 3.2 : Read a single file: To import a single file, you must first identify its extension (.xls, .xlsx, or .csv).
 `For Excel files (.xls and .xlsx), use the `read_excel` function from the `readxl` package.
+
+``` raw_data = read_excel('file path/filename.xlsx')
+```
+`For .csv files, the import method depends on the delimiter used:
+
+`Comma-delimited (.csv) file:
 ```r
 raw_data = read.csv('file path/filename.csv')
-raw_data = read.csv2('file path/filename.csv')
-raw_data = read_excel('file path/filename.xlsx')
-raw_data = read_excel('file path/filename.xls') 
 ```
 `read_csv()`: is special cases of the more general read_delim(). They're useful for reading the most common types of flat file data, comma separated values and tab separated values, 
  respectively. 
