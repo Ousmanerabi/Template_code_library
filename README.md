@@ -234,7 +234,7 @@ The `summarise` function calculates the mean and standard deviation for the spec
 
 The `ceiling` function is used to round up the calculated value.
 
-sd: the standard deviation of the variable
+`sd`: the standard deviation of the variable
 
 lower_bound: the lower limit of the interval
 
