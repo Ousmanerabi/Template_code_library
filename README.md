@@ -40,11 +40,11 @@ setwd()
 ```
 `For .csv files, the import method depends on the delimiter used:
 
-“*” Comma-delimited (.csv) file:
+* Comma-delimited (.csv) file:
 ```r
 raw_data = read.csv('file path/filename.csv')
 ```
-“*” Semicolon-delimited (.csv) file:
+* Semicolon-delimited (.csv) file:
 
 ```raw_data = read.csv2('file path/filename.csv')
 ```
