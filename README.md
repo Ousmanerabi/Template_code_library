@@ -55,17 +55,21 @@ raw_data = read.csv2('file path/filename.csv')
 ##### option 1: read .xls files
 ##### Breaking down the code:
 
-`The code below retrieves all .xls files in your working directory and stores them in the object data.
+The code below retrieves all .xls files in your working directory and stores them in the object data.
+
 ```r
 
 data = list.files(pattern = ".xls", full.names = TRUE)
 ```
-`The code snippet above imports all `.xls` files into the data object and stores them in the `myfiles` object.
+
+The code snippet above imports all `.xls` files into the data object and stores them in the `myfiles` object.
 
 ```r
 myfiles = lapply(data, read_xls)
+
 ```
-`The code below merges all `.xls` files from the myfiles object into a single data.frame named `raw_data`.
+The code below merges all `.xls` files from the myfiles object into a single data.frame named `raw_data`.
+
 ```r
 raw_data <- dplyr::bind_rows(myfiles)
 ```
