@@ -221,7 +221,7 @@ An outlier is “an observation that deviates so much from other observations as
 
 This code detects outliers at the health facility level by month and year using three different methods:
 
-* Mean ± 3 standard deviations:
+* Option 1: Mean ± 3 standard deviations:
 
 The method of the mean plus or minus three SD is based on the characteristics of a `normal distribution` for which 99.87% of the data appear within this range.
 
@@ -253,7 +253,7 @@ df_stats_mean <- raw_data %>%
 
 ```
 
-* Interquartile range (IQR):
+* Option 2: Interquartile range (IQR):
 
 Interquartile Range (IQR) is a technique that detects outliers by measuring the variability in a dataset.
 
@@ -283,7 +283,7 @@ df_stats_iqr <- df %>%
     )
 ```
 
-* Median ± 15 median absolute deviation (MAD):
+* Option 3: Median ± 15 median absolute deviation (MAD):
 
  MAD is a resistant measure of variability as it relies on the median as the estimate of the center of the distribution, and on the absolute difference rather than the squared difference.
 
