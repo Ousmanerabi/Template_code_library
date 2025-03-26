@@ -36,7 +36,8 @@ setwd()
 #### Step 3.2 : Read a single file: To import a single file, you must first identify its extension (.xls, .xlsx, or .csv).
 `For Excel files (.xls and .xlsx), use the `read_excel` function from the `readxl` package.
 
-``` raw_data = read_excel('file path/filename.xlsx')
+```r
+raw_data = read_excel('file path/filename.xlsx')
 ```
 `For .csv files, the import method depends on the delimiter used:
 
@@ -46,18 +47,10 @@ raw_data = read.csv('file path/filename.csv')
 ```
 * Semicolon-delimited (.csv) file:
 
-```
+```r
 raw_data = read.csv2('file path/filename.csv')
 ```
 
-`read_csv()`: is special cases of the more general read_delim(). They're useful for reading the most common types of flat file data, comma separated values and tab separated values, 
- respectively. 
-
-`read_csv2()`: uses ⁠;⁠ for the field separator and ⁠,⁠ for the decimal point. This format is common in some European countries
-
-`read_excel()`: calls excel_format() to determine if path is xls or xlsx, based on the file extension and the file itself, in that order. 
- Use 'read_xls()' and 'read_xlsx()`: directly if you know better and want to prevent such guessing.
- 
 #### Step 3.3 : Read multiple files and bind it into a single file
 ##### option 1: read .xls files
 ##### Breaking down the code:
