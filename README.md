@@ -253,9 +253,14 @@ df_stats_mean <- raw_data %>%
 * Interquartile range (IQR):
 
 Interquartile Range (IQR) is a technique that detects outliers by measuring the variability in a dataset.
+
+The Interquartile Range (IQR) measures variability by splitting a data set into quartiles. The data is first arranged in ascending order, then divided into four equal parts. 
+
+The values Q1 (25th percentile), Q2 (50th percentile or median), and Q3 (75th percentile) are used to separate the data into these four segments.
 ```r
 df_stats_iqr <- df %>%
     group_by(adm1, adm2, hf, UID, year) %>%  # Removed Variables if it's not needed for grouping
+    arrange(adm1, adm2, hf, UID,year)%>%
     summarise(
       Q1 = quantile(.data[[column]], 0.25, na.rm = TRUE),
       Q3 = quantile(.data[[column]], 0.75, na.rm = TRUE),
@@ -265,6 +270,7 @@ df_stats_iqr <- df %>%
       .groups = "drop"
     )
 ```
+
 * Median ± 15 median absolute deviation (MAD)
 
 ### Step 7: Replace outliers
