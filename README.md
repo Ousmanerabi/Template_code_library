@@ -67,7 +67,7 @@ myfiles = lapply(data, read_xls)
 ```
 `The code below merges all `.xls` files from the myfiles object into a single data.frame named `raw_data`.
 ```r
-raw_data <- dplyr::bind_rows(myfiles) %>% clean_names()
+raw_data <- dplyr::bind_rows(myfiles)
 ```
 - #### Note: if ou're using .xlsx, .cvs or .csv2, please change or modify the code 
 
@@ -82,9 +82,11 @@ glimpse()
 
 ```
 ### Step 5: Select and rename key variables
+` This code enables you to select all the variables needed for routine data analysis and rename them accordingly. Make sure to adjust the variable names to match those in your raw_data dataframe.
+  The `clean_names` function replaces spaces in variable names with `underscores (_)`.
 ```r
 
-raw_data = raw_data %>%
+raw_data = raw_data %>% %>% clean_names()
                 dplyr::select(adm1 = orgunitlevel2, adm2, hf = organisationunitname, period =periodname, 
                 reprate = consultation_externe_reporting_rate,
                 reptime = consultation_externe_reporting_rate_on_time, 
