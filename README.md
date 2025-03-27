@@ -19,7 +19,7 @@ provide other tools for cleaning and examining data.frames.
 
 `tidyverse`:  is designed to make it easy to install and load core packages from the tidyverse in a single command
 
-`writexl`: 
+`writexl`: package in R is used to write data frames to Excel .xlsx files. It provides a simple and efficient way to save your R data in Excel format without needing Excel to be installed
 
 
 ### Step 2: Load the packages already installed
