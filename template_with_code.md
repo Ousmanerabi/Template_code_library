@@ -41,24 +41,27 @@
 
 
 ```
-### Step 6: Compute new variables
+
+### Step 6: Outliers detection 
 ```r
 
 
 
 ```
-### Step 7: Transform data element into appropriate data type
+
+### Step 7: Replace outliers
 ```r
 
 
 
 ```
-### Step 8: Save the transform data in excel/csv
+### Step 8: Compute new variables
 ```r
 
 
 
 ```
+
 ### Step 9: Aggregate data element monthly and yearly at the appropriate admnin level
 
 #### Step 9.1: Aggreate data element monthly at the appropriate admnin level and save it
