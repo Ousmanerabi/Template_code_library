@@ -242,6 +242,7 @@ lower_bound: the lower limit of the interval
 upper_bound: the upper limit of the interval
 
 ```r
+detect_outliers <- function(df, column) {
 df_stats_mean <- raw_data %>%
     group_by(adm1, adm2, hf, UID, year) %>% 
     summarise(
@@ -251,7 +252,14 @@ df_stats_mean <- raw_data %>%
       upper_bound = moyenne + 3 * sd,
       .groups = "drop"
     )
-
+# Join stats back to original data and classify outliers
+  df_result <- df %>%
+    left_join(df_stats, by = c("adm1", "adm2", "hf", "UID", "year")) %>%
+    mutate(
+      outliers_moyenne = ifelse(.data[[column]] < lower_bound | .data[[column]] > upper_bound, "outliers", "normales values")
+)
+return(df_result)
+}
 ```
 
 * Option 2: Interquartile range (IQR):
@@ -272,7 +280,8 @@ The `quantile` function produces sample quantiles corresponding to the given pro
 
 
 ```r
-df_stats_iqr <- df %>%
+detect_outliers <- function(df, column) {
+df_stats_iqr <- raw_data %>%
     group_by(adm1, adm2, hf, UID, year) %>%  # Removed Variables if it's not needed for grouping
     arrange(adm1, adm2, hf, UID,year)%>%
     summarise(
@@ -283,6 +292,14 @@ df_stats_iqr <- df %>%
       upper_bound_iqr = quantile(.data[[column]], 0.75, na.rm = TRUE) + 1.5 * (quantile(.data[[column]], 0.75, na.rm = TRUE) - quantile(.data[[column]], 0.25, na.rm = TRUE)),
       .groups = "drop"
     )
+# Join stats back to original data and classify outliers
+  df_result <- df %>%
+    left_join(df_stats, by = c("adm1", "adm2", "hf", "UID", "year")) %>%
+    mutate(
+      outliers_IQR = ifelse(.data[[column]] < lower_bound_iqr | .data[[column]] > upper_bound_iqr, "outliers", "normales values")
+)
+return(df_result)
+}
 ```
 
 * Option 3: Median ± 15 median absolute deviation (MAD):
@@ -292,7 +309,8 @@ df_stats_iqr <- df %>%
  The advantage of MAD is the avoidance of influence by outliers.
 
 ```r
-  df_stats_mad <- df %>%
+detect_outliers <- function(df, column) {
+  df_stats_mad <- raw_data %>%
     group_by(adm1, adm2, hf, UID, year) %>%  # Removed Variables if it's not needed for grouping
     summarise(
       mediane = ceiling(median(.data[[column]], na.rm = TRUE)),
@@ -301,9 +319,17 @@ df_stats_iqr <- df %>%
       BS_median = mediane + 15 * median_absolute,
       .groups = "drop"
     )
+# Join stats back to original data and classify outliers
+  df_result <- df %>%
+    left_join(df_stats, by = c("adm1", "adm2", "hf", "UID", "year")) %>%
+    mutate(
+      outliers_mad = ifelse(.data[[column]] < BI_median | .data[[column]] > BS_median, "outliers", "normales values")
+)
+return(df_result)
+}
 ```
 
-*** You need to select one of these three methods.
+- #### Note You need to select one of these three methods.
 
 
 ### Step 7: Replace outliers
@@ -311,6 +337,9 @@ df_stats_iqr <- df %>%
 After selecting an outlier detection method, you should choose an appropriate technique for replacing them.
 
 In this example, a moving average is used to replace outliers by month for a given health facility. However, in DHSI2 data, the values before and after an outlier are often missing. In such cases, the outlier is replaced using the nearest available preceding and following values.
+
+##### 7.1: Function to find the nearest available values
+
 
 ```r
 
@@ -344,10 +373,10 @@ find_valid_neighbors <- function(i, values) {
   }
 }
 ```
+##### 7.2: Apply imputation using the valid neighbors to replace outliers.
 
-Apply imputation using the valid neighbors.
 
-In this example, the median method has been selected as the outlier detection algorithm.
+In this cases, the `Median Absolute Deviation` method has been selected as the outlier detection algorithm.
 
 Please replace `outliers_halper` with your chosen method.
 
@@ -360,78 +389,137 @@ Finally, the sapply function is used to replace all detected outliers with the `
 
 ```r
 
-ind= which(data_long1$outliers_halper == "outliers")
+ind= which(df_results$outliers_halper == "outliers")
 
 
-data_long1$imput_values = rep(NA, length(nrow(data_long1)))
+df_results$imput_values = rep(NA, length(nrow(df_results)))
 
 
-data_long1$imput_values[ind] <- sapply(ind, function(i) find_valid_neighbors(i, data_long1$values))
+df_results$imput_values[ind] <- sapply(ind, function(i) find_valid_neighbors(i, df_results$values))
 
 ```
 
 
 ### Step 8: Compute new variables
 
-```r
-raw_data = raw_data %>%
-  rowwise() %>% 
-  mutate(allout = sum(allout_u5, allout_ov5, allout_preg,allout_u5_chw,allout_ov5_chw,allout_preg_chw, na.rm = TRUE),
-         susp = sum(susp_u5, susp_ov5, susp_preg, susp_u5_chw, susp_ov5_chw, susp_preg_chw,na.rm = TRUE),
-         test_u5 = sum(test_rdt_u5, test_mic_u5, test_rdt_u5_chw,na.rm = T),
-         test_ov5 =sum(test_rdt_ov5, test_mic_ov5,test_rdt_ov5_chw, na.rm = T),
-         test_preg = sum(test_rdt_preg, test_mic_preg,test_rdt_preg_chw, na.rm = T),
-         #test_rdt = sum(test_rdt_u5, test_rdt_ov5, test_rdt_preg, na.rm = TRUE),
-         #test_mic = sum(test_mic_u5, test_mic_ov5, test_mic_preg, na.rm = TRUE),
-         test = sum(test_u5, test_ov5, test_preg, na.rm = TRUE),
-         maltreat_u5 = sum(maltreat_u5_arte_lum, maltreat_u5_artesu_amod, maltreat_u5_artesu_meflo, maltreat_u5_dihydr_pip, maltreat_u5_chw,maltreat_u5_ACT_chw, na.rm=TRUE),
-         maltreat_ov5 = sum(maltreat_ov5_arte_lum, maltreat_ov5_artesu_amod, maltreat_ov5_artesu_meflo, maltreat_ov5_dihydr_pip, maltreat_ov5_chw,maltreat_ov5_ACT_chw, na.rm=TRUE),
-         maltreat_preg = sum(maltreat_dihydr_pip_preg, maltreat_arte_lum_preg, maltreat_artesu_meflo_preg,maltreat_artesu_amod_preg, maltreat_preg_chw,maltreat_preg_ACT_chw,na.rm = T),
-         maltreat = sum(maltreat_u5, maltreat_ov5, maltreat_preg, na.rm=TRUE),
-         conf_mic_u5 = sum(conf_mic_pf_u5, conf_mic_pm_u5, conf_mic_po_u5, conf_mic_pv_u5,conf_mic_oth_u5,na.rm=TRUE),
-         conf_mic_ov5 = sum(conf_mic_pf_ov5, conf_mic_pm_ov5, conf_mic_po_ov5, conf_mic_pv_ov5,conf_mic_oth_ov5,na.rm=TRUE),
-         conf_mic_preg = sum(conf_mic_pf_preg, conf_mic_pm_preg, conf_mic_po_preg, conf_mic_pv_preg, conf_mic_oth_preg, na.rm = T),
-         conf_mic = sum(conf_mic_u5, conf_mic_ov5, conf_mic_preg, na.rm = T),
-         #conf_rdt_mic_u5 = sum(conf_rdt_u5, conf_mic_u5, na.rm = TRUE),
-         #conf_rdt_mic_ov5 = sum(conf_rdt_ov5, conf_mic_ov5, na.rm = TRUE),
-         #conf_rdt_mic_preg = sum(conf_rdt_preg, conf_mic_preg, na.rm = T),
-         #conf_rdt_mic = sum(conf_rdt_mic_u5, conf_rdt_mic_ov5, conf_rdt_mic_preg, na.rm = TRUE),
-         conf_rdt = sum(conf_rdt_u5, conf_rdt_ov5,conf_rdt_preg, conf_rdt_u5_chw, conf_rdt_ov5_chw, conf_rdt_preg_chw, na.rm = T),
-         conf = sum(conf_rdt, conf_mic, na.rm = TRUE),
-         maladm_u5 = sum(maladm_u5_anemie, maladm_u5_neuro, maladm_other_u5, na.rm = TRUE),
-         maladm_ov5 = sum(maladm_ov5_anemie, maladm_ov5_neuro, maladm_other_ov5, na.rm = TRUE),
-         maladm_preg = sum(maladm_anemie_preg, maladm_neuro_preg, maladm_other_preg, na.rm = T),
-         maladm = sum(maladm_u5, maladm_ov5, maladm_preg, na.rm = TRUE),
-         alladm = sum(alladm_u5, alladm_ov5,alladm_preg, na.rm = TRUE),
-         maldth = sum(maldth_u5, maldth_ov5, maldth_preg, na.rm = TRUE),
-         alldth = sum(alltdh_u5, alldth_preg, alltdh_ov5, na.rm = T),
-         susp_chw = sum(susp_u5_chw, susp_ov5_chw,susp_preg_chw, na.rm = TRUE),
-         test_rdt_chw = sum(test_rdt_u5_chw, test_rdt_ov5_chw, test_rdt_preg_chw, na.rm = TRUE),
-         conf_rdt_chw = sum(conf_rdt_u5_chw, conf_rdt_ov5_chw, conf_rdt_preg_chw, na.rm = TRUE),
-         maltreat_chw = sum(maltreat_u5_chw, maltreat_ov5_chw,maltreat_preg_chw, na.rm = TRUE),
-         confsev_u5 = maladm_u5, confsev_ov5 = maladm_ov5, confsev = maladm,
-         iptp1 = sum(iptp1, na.rm = T),
-         iptp2 = sum(iptp2, na.rm = T), iptp3 = sum(iptp3, na.rm = T)) 
+Now that the outliers have been replaced, we can proceed with calculating the necessary totals. However, note that in some cases, the DHIS2 extraction already includes these total indicators, so you can skip this step if that's the case.
+The `rowwise()` function allows you to calculate on a data frame one row at a time.
 
+```r
+
+data_compute = df_results %>%
+  rowwise() %>%
+  mutate(
+    # All outpatient calculations
+    allout = sum(across(c(allout_u5, allout_ov5, allout_preg, 
+                         allout_u5_chw, allout_ov5_chw, allout_preg_chw), 
+                        sum, na.rm = TRUE)),
+    
+    # Suspected cases
+    susp = sum(across(c(susp_u5, susp_ov5, susp_preg, 
+                       susp_u5_chw, susp_ov5_chw, susp_preg_chw), 
+                      sum, na.rm = TRUE)),
+    susp_chw = sum(across(c(susp_u5_chw, susp_ov5_chw, susp_preg_chw), 
+                         sum, na.rm = TRUE)),
+    
+    # Tests
+    test_u5 = sum(across(c(test_rdt_u5, test_mic_u5, test_rdt_u5_chw), 
+                        sum, na.rm = TRUE)),
+    test_ov5 = sum(across(c(test_rdt_ov5, test_mic_ov5, test_rdt_ov5_chw), 
+                         sum, na.rm = TRUE)),
+    test_preg = sum(across(c(test_rdt_preg, test_mic_preg, test_rdt_preg_chw), 
+                          sum, na.rm = TRUE)),
+    test = sum(test_u5, test_ov5, test_preg, na.rm = TRUE),
+    test_rdt_chw = sum(across(c(test_rdt_u5_chw, test_rdt_ov5_chw, test_rdt_preg_chw), 
+                             sum, na.rm = TRUE)),
+    
+    # Malaria treatment
+    maltreat_u5 = sum(across(c(maltreat_u5_arte_lum, maltreat_u5_artesu_amod, 
+                             maltreat_u5_artesu_meflo, maltreat_u5_dihydr_pip, 
+                             maltreat_u5_chw, maltreat_u5_ACT_chw), 
+                            sum, na.rm = TRUE)),
+    maltreat_ov5 = sum(across(c(maltreat_ov5_arte_lum, maltreat_ov5_artesu_amod, 
+                              maltreat_ov5_artesu_meflo, maltreat_ov5_dihydr_pip, 
+                              maltreat_ov5_chw, maltreat_ov5_ACT_chw), 
+                             sum, na.rm = TRUE)),
+    maltreat_preg = sum(across(c(maltreat_dihydr_pip_preg, maltreat_arte_lum_preg, 
+                               maltreat_artesu_meflo_preg, maltreat_artesu_amod_preg, 
+                               maltreat_preg_chw, maltreat_preg_ACT_chw), 
+                              sum, na.rm = TRUE)),
+    maltreat = sum(maltreat_u5, maltreat_ov5, maltreat_preg, na.rm = TRUE),
+    maltreat_chw = sum(across(c(maltreat_u5_chw, maltreat_ov5_chw, maltreat_preg_chw), 
+                             sum, na.rm = TRUE)),
+    
+    # Confirmed microscopy cases
+    conf_mic_u5 = sum(across(c(conf_mic_pf_u5, conf_mic_pm_u5, conf_mic_po_u5, 
+                             conf_mic_pv_u5, conf_mic_oth_u5), 
+                            sum, na.rm = TRUE)),
+    conf_mic_ov5 = sum(across(c(conf_mic_pf_ov5, conf_mic_pm_ov5, conf_mic_po_ov5, 
+                              conf_mic_pv_ov5, conf_mic_oth_ov5), 
+                             sum, na.rm = TRUE)),
+    conf_mic_preg = sum(across(c(conf_mic_pf_preg, conf_mic_pm_preg, conf_mic_po_preg, 
+                               conf_mic_pv_preg, conf_mic_oth_preg), 
+                              sum, na.rm = TRUE)),
+    conf_mic = sum(conf_mic_u5, conf_mic_ov5, conf_mic_preg, na.rm = TRUE),
+    
+    # Confirmed RDT and total confirmed
+    conf_rdt = sum(across(c(conf_rdt_u5, conf_rdt_ov5, conf_rdt_preg, 
+                          conf_rdt_u5_chw, conf_rdt_ov5_chw, conf_rdt_preg_chw), 
+                         sum, na.rm = TRUE)),
+    conf_rdt_chw = sum(across(c(conf_rdt_u5_chw, conf_rdt_ov5_chw, conf_rdt_preg_chw), 
+                             sum, na.rm = TRUE)),
+    conf = sum(conf_rdt, conf_mic, na.rm = TRUE),
+    
+    # Malaria admissions
+    maladm_u5 = sum(across(c(maladm_u5_anemie, maladm_u5_neuro, maladm_other_u5), 
+                          sum, na.rm = TRUE)),
+    maladm_ov5 = sum(across(c(maladm_ov5_anemie, maladm_ov5_neuro, maladm_other_ov5), 
+                           sum, na.rm = TRUE)),
+    maladm_preg = sum(across(c(maladm_anemie_preg, maladm_neuro_preg, maladm_other_preg), 
+                            sum, na.rm = TRUE)),
+    maladm = sum(maladm_u5, maladm_ov5, maladm_preg, na.rm = TRUE),
+    
+    # All admissions and deaths
+    alladm = sum(across(c(alladm_u5, alladm_ov5, alladm_preg), 
+                       sum, na.rm = TRUE)),
+    maldth = sum(across(c(maldth_u5, maldth_ov5, maldth_preg), 
+                       sum, na.rm = TRUE)),
+    alldth = sum(across(c(alltdh_u5, alldth_preg, alltdh_ov5), 
+                       sum, na.rm = TRUE)),
+    
+    # Severe cases and IPTp
+    confsev_u5 = maladm_u5,
+    confsev_ov5 = maladm_ov5,
+    confsev = maladm,
+    iptp1 = sum(iptp1, na.rm = TRUE),
+    iptp2 = sum(iptp2, na.rm = TRUE),
+    iptp3 = sum(iptp3, na.rm = TRUE)
+  )
 
 ```
-### Step 7: Transform data element into appropriate data type
+
+### Step 8: save the cleaning data in excel/csv
+
+Save the df_results database for future use (reporting rate estimation)
+
 ```r
 
-raw_data = raw_data %>%
-
-### Step 8: Save the transform data in excel/csv
-```r
-
-write.csv(raw_data, 'cleaning_data.csv')
+write.csv(df_results, 'HF_level_cleaning_data.csv')
 
 ```
+
 ### Step 9: Aggregate data element monthly and yearly at the appropriate admnin level
 
+Once the database has been cleaned and organized, the data should be aggregated by month/year and by single year at the admin level defined for stratification (in this example, aggregation is done at the adm2 level).
+
+The monthly/yearly database can be used to estimate monthly incidences and analyze seasonality.
+
+The yearly database will be used to make an annual estimate of the different incidences, helping to assess malaria transmission in each admin.
 
 #### Step 9.1: Aggreate data element monthly at the appropriate admnin level and save it
+
 ```r
-monthly_data_DS = raw_data %>%
+monthly_data_DS = df_results %>%
   group_by(adm1, adm2, year, month) %>%
   dplyr::summarise(across(allout_u5:llins_stockout_days, ~ sum(.x, na.rm = TRUE)))
 
@@ -439,7 +527,7 @@ write.csv(monthly_data_DS, 'Monthly_HD_data.csv')
 ```
 #### Step 9.2: Aggreate data element yearly at the appropriate admnin level and save it
 ```r
-yearly_data_DS = raw_data %>%
+yearly_data_DS = df_results %>%
   group_by(adm1, adm2, year) %>%
   dplyr::summarise(across(allout_u5:llins_stockout_days, ~ sum(.x, na.rm = TRUE)))
 
