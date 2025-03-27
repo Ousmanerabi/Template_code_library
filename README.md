@@ -1,4 +1,8 @@
 ### Step 1: Install packages
+
+These R packages only need to be installed once. However, if you have uninstalled RStudio, please reinstall them.
+
+
 ```r
 install.packages(c('dplyr', 'readxl', 'tidyverse', 'janitor', 'writexl'))
 ```
@@ -17,7 +21,10 @@ provide other tools for cleaning and examining data.frames.
 
 `writexl`: 
 
+
 ### Step 2: Load the packages already installed
+
+Once a library is installed, make sure to load it. Each time you restart RStudio, remember to load the libraries again.
 ```r
 library(dplyr)
 library(readxl)
@@ -29,10 +36,16 @@ library(writexl)
 ### Step 3: Import data
 
 #### Step 3.1 : Setup the directory
+
+Setting up the directory correctly in R is important for managing file paths, loading datasets, saving results, and organizing your workflow
+
 ```r
-setwd()
+setwd("path/to/your/directory)
+
 ```
-` setwd`: file path
+Replace `path/to/your/directory` with the full path of the folder you want to set as your working directory.
+
+
 #### Step 3.2 : Read a single file: To import a single file, you must first identify its extension (.xls, .xlsx, or .csv).
 For Excel files `(.xls and .xlsx)`, use the `read_excel` function from the `readxl` package.
 
