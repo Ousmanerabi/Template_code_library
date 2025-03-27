@@ -308,6 +308,68 @@ df_stats_iqr <- df %>%
 
 ### Step 7: Replace outliers
 
+After selecting an outlier detection method, you should choose an appropriate technique for replacing them.
+
+In this example, a moving average is used to replace outliers by month for a given health facility. However, in DHSI2 data, the values before and after an outlier are often missing. In such cases, the outlier is replaced using the nearest available preceding and following values.
+
+```r
+
+
+Function to find the nearest non-zero, non-NA values before and after an index
+
+find_valid_neighbors <- function(i, values) {
+  # Look backward for the last valid value (not 0 or NA)
+  last_valid <- NA
+  for (j in (i - 1):1) {
+    if (!is.na(values[j]) && values[j] != 0) {
+      last_valid <- values[j]
+      break
+    }
+  }
+  
+  # Look forward for the next valid value (not 0 or NA)
+  next_valid <- NA
+  for (j in (i + 1):length(values)) {
+    if (!is.na(values[j]) && values[j] != 0) {
+      next_valid <- values[j]
+      break
+    }
+  }
+  
+  # Return the mean of valid neighbors, or NA if none found
+  if (is.na(last_valid) || is.na(next_valid)) {
+    return(NA)
+  } else {
+    return(mean(c(last_valid, next_valid)))
+  }
+}
+```
+
+Apply imputation using the valid neighbors.
+
+In this example, the median method has been selected as the outlier detection algorithm.
+
+Please replace `outliers_halper` with your chosen method.
+
+First, only the indicators identified as outliers based on the selected method are extracted and stored in the object `ind`.
+
+Next, a new column `imput_values` is created and initialized with NAs.
+
+Finally, the sapply function is used to replace all detected outliers with the `find_valid_neighbors` function from the previous step.
+
+
+```r
+
+ind= which(data_long1$outliers_halper == "outliers")
+
+
+data_long1$imput_values = rep(NA, length(nrow(data_long1)))
+
+
+data_long1$imput_values[ind] <- sapply(ind, function(i) find_valid_neighbors(i, data_long1$values))
+
+```
+
 
 ### Step 8: Compute new variables
 
