@@ -1,6 +1,6 @@
 # Data preprocessing
 
-This chapter will cover the following: 
+*Data preprocessing is to clean and format the data in a way that's suitable for analysis. Below is a list of data preprocessing in SNT arranged in a sequential order:*
 
 - *Installing and loading packages in R*
 
@@ -16,7 +16,6 @@ This chapter will cover the following:
 
 - *Aggregating data at the desired administrative level by month/year and annually*
 
-## Objective: The objective of data preprocessing is to clean and format the data in a way that's suitable for analysis. 
 
 ### Step 1: Install packages
 
