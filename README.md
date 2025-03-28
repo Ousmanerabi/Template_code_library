@@ -1,7 +1,6 @@
 # Data preprocessing
-This cha
 
-This chapter will cover the following topics:
+This chapter will cover the following: 
 
 - *Installing and loading packages in R*
 
@@ -17,6 +16,7 @@ This chapter will cover the following topics:
 
 - *Aggregating data at the desired administrative level by month/year and annually*
 
+## Objective: The objective of data preprocessing is to clean and format the data in a way that's suitable for analysis. 
 
 ### Step 1: Install packages
 
