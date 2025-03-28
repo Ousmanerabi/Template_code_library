@@ -246,3 +246,111 @@ raw_data = raw_data %>% %>% clean_names()%>%
 ```
 
 
+### Step 6: Compute new variables
+
+Now that the outliers have been replaced, we can proceed with calculating the necessary totals. However, note that in some cases, the DHIS2 extraction already includes these total indicators, so you can skip this step if that's the case.
+The `rowwise()` function allows you to calculate on a data frame one row at a time.
+
+```r
+
+data_compute = df_results %>%
+  rowwise() %>%
+  mutate(
+    # All outpatient calculations
+    allout = sum(across(c(allout_u5, allout_ov5, allout_preg, 
+                         allout_u5_chw, allout_ov5_chw, allout_preg_chw), 
+                        sum, na.rm = TRUE)),
+    
+    # Suspected cases
+    susp = sum(across(c(susp_u5, susp_ov5, susp_preg, 
+                       susp_u5_chw, susp_ov5_chw, susp_preg_chw), 
+                      sum, na.rm = TRUE)),
+    susp_chw = sum(across(c(susp_u5_chw, susp_ov5_chw, susp_preg_chw), 
+                         sum, na.rm = TRUE)),
+    
+    # Tests
+    test_u5 = sum(across(c(test_rdt_u5, test_mic_u5, test_rdt_u5_chw), 
+                        sum, na.rm = TRUE)),
+    test_ov5 = sum(across(c(test_rdt_ov5, test_mic_ov5, test_rdt_ov5_chw), 
+                         sum, na.rm = TRUE)),
+    test_preg = sum(across(c(test_rdt_preg, test_mic_preg, test_rdt_preg_chw), 
+                          sum, na.rm = TRUE)),
+    test = sum(test_u5, test_ov5, test_preg, na.rm = TRUE),
+    test_rdt_chw = sum(across(c(test_rdt_u5_chw, test_rdt_ov5_chw, test_rdt_preg_chw), 
+                             sum, na.rm = TRUE)),
+    
+    # Malaria treatment
+    maltreat_u5 = sum(across(c(maltreat_u5_arte_lum, maltreat_u5_artesu_amod, 
+                             maltreat_u5_artesu_meflo, maltreat_u5_dihydr_pip, 
+                             maltreat_u5_chw, maltreat_u5_ACT_chw), 
+                            sum, na.rm = TRUE)),
+    maltreat_ov5 = sum(across(c(maltreat_ov5_arte_lum, maltreat_ov5_artesu_amod, 
+                              maltreat_ov5_artesu_meflo, maltreat_ov5_dihydr_pip, 
+                              maltreat_ov5_chw, maltreat_ov5_ACT_chw), 
+                             sum, na.rm = TRUE)),
+    maltreat_preg = sum(across(c(maltreat_dihydr_pip_preg, maltreat_arte_lum_preg, 
+                               maltreat_artesu_meflo_preg, maltreat_artesu_amod_preg, 
+                               maltreat_preg_chw, maltreat_preg_ACT_chw), 
+                              sum, na.rm = TRUE)),
+    maltreat = sum(maltreat_u5, maltreat_ov5, maltreat_preg, na.rm = TRUE),
+    maltreat_chw = sum(across(c(maltreat_u5_chw, maltreat_ov5_chw, maltreat_preg_chw), 
+                             sum, na.rm = TRUE)),
+    
+    # Confirmed microscopy cases
+    conf_mic_u5 = sum(across(c(conf_mic_pf_u5, conf_mic_pm_u5, conf_mic_po_u5, 
+                             conf_mic_pv_u5, conf_mic_oth_u5), 
+                            sum, na.rm = TRUE)),
+    conf_mic_ov5 = sum(across(c(conf_mic_pf_ov5, conf_mic_pm_ov5, conf_mic_po_ov5, 
+                              conf_mic_pv_ov5, conf_mic_oth_ov5), 
+                             sum, na.rm = TRUE)),
+    conf_mic_preg = sum(across(c(conf_mic_pf_preg, conf_mic_pm_preg, conf_mic_po_preg, 
+                               conf_mic_pv_preg, conf_mic_oth_preg), 
+                              sum, na.rm = TRUE)),
+    conf_mic = sum(conf_mic_u5, conf_mic_ov5, conf_mic_preg, na.rm = TRUE),
+    
+    # Confirmed RDT and total confirmed
+    conf_rdt = sum(across(c(conf_rdt_u5, conf_rdt_ov5, conf_rdt_preg, 
+                          conf_rdt_u5_chw, conf_rdt_ov5_chw, conf_rdt_preg_chw), 
+                         sum, na.rm = TRUE)),
+    conf_rdt_chw = sum(across(c(conf_rdt_u5_chw, conf_rdt_ov5_chw, conf_rdt_preg_chw), 
+                             sum, na.rm = TRUE)),
+    conf = sum(conf_rdt, conf_mic, na.rm = TRUE),
+    
+    # Malaria admissions
+    maladm_u5 = sum(across(c(maladm_u5_anemie, maladm_u5_neuro, maladm_other_u5), 
+                          sum, na.rm = TRUE)),
+    maladm_ov5 = sum(across(c(maladm_ov5_anemie, maladm_ov5_neuro, maladm_other_ov5), 
+                           sum, na.rm = TRUE)),
+    maladm_preg = sum(across(c(maladm_anemie_preg, maladm_neuro_preg, maladm_other_preg), 
+                            sum, na.rm = TRUE)),
+    maladm = sum(maladm_u5, maladm_ov5, maladm_preg, na.rm = TRUE),
+    
+    # All admissions and deaths
+    alladm = sum(across(c(alladm_u5, alladm_ov5, alladm_preg), 
+                       sum, na.rm = TRUE)),
+    maldth = sum(across(c(maldth_u5, maldth_ov5, maldth_preg), 
+                       sum, na.rm = TRUE)),
+    alldth = sum(across(c(alltdh_u5, alldth_preg, alltdh_ov5), 
+                       sum, na.rm = TRUE)),
+    
+    # Severe cases and IPTp
+    confsev_u5 = maladm_u5,
+    confsev_ov5 = maladm_ov5,
+    confsev = maladm,
+    iptp1 = sum(iptp1, na.rm = TRUE),
+    iptp2 = sum(iptp2, na.rm = TRUE),
+    iptp3 = sum(iptp3, na.rm = TRUE)
+  )
+
+```
+
+### Step 7: save the cleaning data in excel/csv
+
+Save the df_results database for future use (reporting rate estimation)
+
+```r
+
+write.csv(df_results, 'HF_level_cleaning_data.csv')
+
+```
+
