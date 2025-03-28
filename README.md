@@ -61,7 +61,7 @@ library(writexl)
 Setting up the directory correctly in R is important for managing file paths, loading datasets, saving results, and organizing your workflow
 
 ```r
-setwd("path/to/your/directory)
+setwd("path/to/your/directory")
 
 ```
 Replace `path/to/your/directory` with the full path of the folder you want to set as your working directory.
