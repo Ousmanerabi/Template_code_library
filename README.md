@@ -1,6 +1,6 @@
 # Data preprocessing
 
-*Data preprocessing is to clean and format the data in a way that's suitable for analysis. Below is a list of data preprocessing in SNT arranged in a sequential order:*
+*The essence of data preprocessing is to clean and format the data in a way that's suitable for analysis. Below is a list of data preprocessing steps in SNT arranged in a sequential order:*
 
 - *Installing and loading packages in R*
 
