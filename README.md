@@ -31,13 +31,14 @@ install.packages(c('dplyr', 'readxl', 'tidyverse', 'janitor', 'writexl'))
 
 `janitor`: has simple functions for examining and cleaning dirty data. The main janitor functions:
 
-perfectly format data.frame column names;
-create and format frequency tables of one, two, or three variables - think an improved table(); and 
-provide other tools for cleaning and examining data.frames.
+- format data.frame column names;
+- create and format frequency tables of one, two, or three variables
+- provide other tools for cleaning and examining data.frames
+(ref:xxx)
 
-`tidyverse`:  is designed to make it easy to install and load core packages from the tidyverse in a single command
+`tidyverse`:  is designed to make it easy to install and load core packages from the tidyverse in a single command (ref:xxx)
 
-`writexl`: package in R is used to write data frames to Excel .xlsx files. It provides a simple and efficient way to save your R data in Excel format without needing Excel to be installed
+`writexl`: package in R is used to write data frames to Excel .xlsx files. It provides a simple and efficient way to save your R data in Excel format without needing Excel to be installed (ref:xxx)
 
 
 ### Step 2: Load the packages already installed
