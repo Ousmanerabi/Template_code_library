@@ -1,22 +1,22 @@
 # Data preprocessing
 
-*The essence of data preprocessing is to clean and format the data in a way that's suitable for analysis. Below is a list of data preprocessing steps in SNT arranged in a sequential order:*
+*The essence of data preprocessing is to clean and format the data in a way that's suitable for analysis. This chapter will cover the following topics:*
 
-- *Installing and loading packages in R*
+- Installing and loading packages in R
 
-- *Importing single or multiple files with various extensions in R*
+- Importing single or multiple files with various extensions in R
 
-- *Describing variables*
+- Describing variables
 
-- *Selecting and renaming variables*
+- Selecting and renaming variables
 
-- *Detecting and replacing outliers*
+- Detecting and replacing outliers
 
-- *Creating new total variables*
+- Computing new variables
 
-- *Aggregating data at the desired administrative level by month/year and annually*
+- Aggregating data at the desired administrative level by month-year and annually
 
-
+---
 ### Step 1: Install packages
 
 These R packages only need to be installed once. However, if you have uninstalled RStudio, please reinstall them.
