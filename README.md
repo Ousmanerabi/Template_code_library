@@ -1,18 +1,21 @@
+# Data preprocessing
+This cha
+
 This chapter will cover the following topics:
 
-Installing and loading packages in R
+- *Installing and loading packages in R*
 
-Importing single or multiple files with various extensions in R
+- *Importing single or multiple files with various extensions in R*
 
-Describing variables
+- *Describing variables*
 
-Selecting and renaming variables
+- *Selecting and renaming variables*
 
-Detecting and replacing outliers
+- *Detecting and replacing outliers*
 
-Creating new total variables
+- *Creating new total variables*
 
-Aggregating data at the desired administrative level by month/year and annually
+- *Aggregating data at the desired administrative level by month/year and annually*
 
 
 ### Step 1: Install packages
