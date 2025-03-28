@@ -27,7 +27,7 @@ install.packages(c('dplyr', 'readxl', 'tidyverse', 'janitor', 'writexl'))
 ```
 `dplyr`: is a grammar of data manipulation, providing a consistent set of verbs that help you solve the most common data manipulation challenges. (ref:xxx) 
 
-`readxl`: The readxl package makes it easy to get data out of Excel and into R. Compared to many of the existing packages (e.g. gdata, xlsx, xlsReadWrite) readxl has no external dependencies, so it’s easy to install and use on all operating systems. (ref:xxx)
+`readxl`: The readxl package makes it easy to get data out of Excel and into R. Compared to many of the existing packages (e.g. gdata, xlsx, xls, ReadWrite) readxl has no external dependencies, so it’s easy to install and use on all operating systems. (ref:xxx)
 
 `janitor`: has simple functions for examining and cleaning dirty data. The main janitor functions:
 
