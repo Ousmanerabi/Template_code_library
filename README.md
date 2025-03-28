@@ -1,6 +1,6 @@
 This chapter will cover the following topics:
 
-### Installing and loading packages in R
+#### Installing and loading packages in R
 
 ### Importing single or multiple files with various extensions in R
 
