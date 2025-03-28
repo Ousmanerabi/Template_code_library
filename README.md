@@ -84,13 +84,12 @@ raw_data = read.csv2('file path/filename.csv')
 ```
 
 #### Step 3.3 : Read multiple files and bind it into a single file
-##### option 1: read .xls files
-##### Breaking down the code:
+##### read .xls files
+
 
 The code below retrieves all .xls files in your working directory and stores them in the object data.
 
 ```r
-
 data = list.files(pattern = ".xls", full.names = TRUE)
 ```
 
@@ -98,14 +97,13 @@ The code snippet above imports all `.xls` files into the data object and stores 
 
 ```r
 myfiles = lapply(data, read_xls)
-
 ```
-The code below merges all `.xls` files from the myfiles object into a single data.frame named `raw_data`.
+The code below merges all `.xls` files from the myfiles object into a single DataFrame named `raw_data`.
 
 ```r
 raw_data <- dplyr::bind_rows(myfiles)
 ```
-- #### Note: if ou're using .xlsx, .cvs or .csv2, please change or modify the code 
+- #### Note: if you're using .xlsx, .cvs or .csv2, please change or modify the code by replacing .xls with either `.xlsx` or `.csv` or `.csv2`. Also, replace `read_xls` with `read_xlsx` or `read_csv` or `read_csv2`.
 
 ### Step 4: View the data (description of data)
 ```r
